@@ -17,7 +17,7 @@
 # reading readr library to understand the csv file loaded as a dataset
 # data.crime is a data frame
 library(readr)
-data.crime <- read.csv("/Users/Roshini/Desktop/Data Science/CA3/crime-in-ireland/IRELAND_CRIME_GARDA_DIVISION_wise_2003-2019.csv")
+data.crime <- read.csv("IRELAND_CRIME_GARDA_DIVISION_wise_2003-2019.csv")
 
 # Here the data is summarized with max, min, mean, median quartiles of coloumns
 
@@ -85,15 +85,6 @@ data_regionwise <- as.data.frame(data_regionwise)
 View(data_regionwise)
 str(data_regionwise)
 
-
-#as the data consists of numerical and factoral data, chisquare test is used.
-chisq.test(data_regionwise$TYPE.OF.OFFENCE, data_regionwise$Total_2014, correct=FALSE)
-chisq.test(data_regionwise$TYPE.OF.OFFENCE, data_regionwise$Total_2015, correct=FALSE)
-chisq.test(data_regionwise$TYPE.OF.OFFENCE, data_regionwise$Total_2016, correct=FALSE)
-chisq.test(data_regionwise$TYPE.OF.OFFENCE, data_regionwise$Total_2017, correct=FALSE)
-chisq.test(data_regionwise$TYPE.OF.OFFENCE, data_regionwise$Total_2018, correct=FALSE)
-
-#based on result, we can clearly see p value is less than 0.05. so H0 is rejected.
 
 ##-------------Finding data year wise --------------------
 #Removing data from 2003 to 2008
@@ -178,14 +169,16 @@ plot(x=data_regionwise$REGION, y=data_regionwise$Total_2018)
 # To use histogram, use library lattice
 library(lattice)
 # histogram is to visualize statistical data in different intervals
-histogram(~years, data = noofoffences_yearwise)
+# Year wise total number of crimes from the data set()
+plot(x=years, y=totals, col = 'blue')
 
 #--------------------Normality test-----------------------
+
 
 # normality test carried out, as it tells the data is normally distributed or not
 # normality check for independent variable
 normality_test_offences <- shapiro.test(noofoffences_yearwise$years)
-normality_test_alcohol
+normality_test_offences
 
 # normality check for dependent variable
 normality_test_crimerate <- shapiro.test(noofoffences_yearwise$numberofoffences)
@@ -195,12 +188,14 @@ normality_test_crimerate
 # both are normally distributed.
 
 # normality check using q-q plot
-qqnorm(noofoffences_yearwise$numberofoffences)
-qqline(noofoffences_yearwise$numberofoffences, col = 'blue') #Q-Q best fit 
+qqnorm(noofoffences_yearwise$numberofoffences)# Here noof offences are ploted as cirlces 
+
+qqline(noofoffences_yearwise$numberofoffences, col = 'blue') #Q-Q best fit (the year is the fits in normal distrubtion )
 
 # As the required operation is to determine the relation between two entities, both the entities
-# are normally distributed and the data is contin ous data. So we use pearson test.
+# are normally distributed and the data is continous data. So we use pearson test.
 
+####-----Pearson test ----------------
 test <- cor.test(noofoffences_yearwise$years, noofoffences_yearwise$numberofoffences, 
                  method = 'pearson', exact = FALSE)
 test
@@ -211,6 +206,17 @@ test
                 method = "pearson")
  
 Offence
+
+
+
+#as the data consists of numerical and factoral data, chisquare test is used.
+chisq.test(data_regionwise$TYPE.OF.OFFENCE, data_regionwise$Total_2014, correct=FALSE)
+chisq.test(data_regionwise$TYPE.OF.OFFENCE, data_regionwise$Total_2015, correct=FALSE)
+chisq.test(data_regionwise$TYPE.OF.OFFENCE, data_regionwise$Total_2016, correct=FALSE)
+chisq.test(data_regionwise$TYPE.OF.OFFENCE, data_regionwise$Total_2017, correct=FALSE)
+chisq.test(data_regionwise$TYPE.OF.OFFENCE, data_regionwise$Total_2018, correct=FALSE)
+
+#based on result, we can clearly see p value is less than 0.05. so H0 is rejected.
 
 ####pca analysis for Yearly crime rate.
 #my dataframe consists of only price and date, which are in numeric format
